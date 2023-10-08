@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <title>Daftar Gudang</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Daftar Gudang</h1>
+        <table id="gudangTable" class="display">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Alamat</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Populate table rows with data -->
+                <!-- Use Thymeleaf to iterate over the listGudang and generate rows -->
+                <tr th:each="gudang, iterStat : ${listGudang}">
+                    <td th:text="${iterStat.index + 1}"></td>
+                    <td th:text="${gudang.nama}"></td>
+                    <td th:text="${gudang.alamatGudang}"></td>
+                    <td>
+                        <a type="button" class="btn btn-md btn-primary" th:href="@{/gudang/{id}(id=${gudang.id})}">Detail</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Initialize DataTables -->
+    <script>
+        $(document).ready(function () {
+            $('#gudangTable').DataTable({
+                "columnDefs": [
+                    { "orderable": false, "targets": -1 } // Disable sorting for the last column (Action)
+                ],
+                "lengthMenu": [5, 10, 20], // Number of items per page
+                "pageLength": 10 // Initial page length
+            });
+        });
+    </script>
+</body>
+</html>

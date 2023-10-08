@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <title>Detail Gudang</title>
+    <!-- Atur atribut lainnya di sini -->
+</head>
+<body>
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <!-- Tambahkan breadcrumb jika diperlukan -->
+        </nav>
+        <div class="row justify-content-between align-items-center">
+            <!-- Title and Restock Button -->
+            <div class="col">
+                <h4 class="card-title">Detail Gudang</h4>
+            </div>
+            <div class="col text-end">
+                <a type="button" class="btn btn-secondary btn-md" href="#">Restock</a>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="card" style="width: 30rem;">
+                <div class="card-body">
+                    <!-- Informasi gudang -->
+                    <div>
+                        <p class="card-text" th:text="${gudang.nama}"></p>
+                        <p class="card-text" th:text="${gudang.alamatGudang}"></p>
+                    </div>
+                    <!-- Daftar barang di gudang -->
+                    <div>
+                        <h5 class="card-title">Daftar Barang di Gudang</h5>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>SKU</th>
+                                    <th>Tipe Barang</th>
+                                    <th>Merk</th>
+                                    <th>Harga</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="barang : ${gudang.barangList}">
+                                    <td th:text="${barang.sku}"></td>
+                                    <td th:text="${barang.tipeBarang}"></td>
+                                    <td th:text="${barang.merk}"></td>
+                                    <td th:text="${barang.hargaBarang}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center m-3">
+            <a type="button" class="btn btn-primary btn-md" href="/gudang/viewall">Kembali</a>
+        </div>
+    </div>
+</body>
+</html>
