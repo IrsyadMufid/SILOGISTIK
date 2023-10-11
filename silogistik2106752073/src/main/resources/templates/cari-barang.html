@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <title>Cari Barang</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Cari Ketersediaan Barang</h2>
+        <form th:action="@{/gudang/cari-barang}" method="get">
+            <div class="form-group">
+                <label for="sku">Pilih Barang:</label>
+                <select class="form-control" id="sku" name="sku">
+                    <option value="">Pilih Barang</option>
+                    <option th:each="barang : ${daftarBarang}" th:value="${barang.sku}" th:text="${barang.merk + ' - ' + barang.sku}"></option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Cari</button>
+        </form>
+
+        <!-- Tampilkan daftar gudang jika hasil pencarian tersedia -->
+        <th:block th:if="${listGudang != null}">
+            <h3>Hasil Pencarian Ketersediaan Barang</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID Gudang</th>
+                        <th>Nama Gudang</th>
+                        <th>Alamat Gudang</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loop melalui daftar gudang dan tampilkan informasi gudang -->
+                    <th:block th:each="gudang : ${listGudang}">
+                        <tr>
+                            <td th:text="${gudang.id}"></td>
+                            <td>
+                                <!-- Hyperlink ke halaman detail gudang -->
+                                <a th:href="@{'/gudang/' + ${gudang.id}}" th:text="${gudang.nama}"></a>
+                            </td>
+                            <td th:text="${gudang.alamatGudang}"></td>
+                        </tr>
+                    </th:block>
+                </tbody>
+            </table>
+        </th:block>
+    </div>
+</body>
+</html>

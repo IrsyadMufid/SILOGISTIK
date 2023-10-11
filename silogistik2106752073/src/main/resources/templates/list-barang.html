@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <title>Daftar Barang</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Daftar Barang</h1>
+        <a class="btn btn-primary" th:href="@{/barang/tambah}">Tambah Barang</a>
+        <table id="barangTable" class="display">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>SKU</th>
+                    <th>Merk</th>
+                    <th>Stok</th>
+                    <th>Harga Barang</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Populate table rows with data -->
+                <!-- Use Thymeleaf to iterate over the listBarang and generate rows -->
+                <tr th:each="barangDTO, iterStat : ${listBarang}">
+                    <td th:text="${iterStat.index + 1}"></td>
+                    <td th:text="${barangDTO.sku}"></td>
+                    <td th:text="${barangDTO.merk}"></td>
+                    <td th:text="${barangDTO.stok}"></td>
+                    <td th:text="${barangDTO.hargaBarang}"></td>
+                    <td>
+                        <a type="button" class="btn btn-md btn-primary" th:href="@{/barang/{id}(id=${barangDTO.sku})}">Detail</a>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+    <!-- Initialize DataTables -->
+    <script>
+        $(document).ready(function () {
+            $('#barangTable').DataTable({
+                "columnDefs": [
+                    { "orderable": false, "targets": -1 } // Disable sorting for the last column (Action)
+                ],
+                "lengthMenu": [5, 10, 20], // Number of items per page
+                "pageLength": 10 // Initial page length
+            });
+        });
+    </script>
+</body>
+</html>

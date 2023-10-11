@@ -5,13 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
+import jakarta.persistence.*;
 import java.util.Date;
 
 @Getter
@@ -34,6 +28,5 @@ public class Karyawan {
 
     @Column(name = "tanggal_lahir", nullable = false)
     private Date tanggalLahir;
-
-    // Buat getter dan setter
 }
+

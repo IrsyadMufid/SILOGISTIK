@@ -18,7 +18,7 @@
                 <h4 class="card-title">Detail Gudang</h4>
             </div>
             <div class="col text-end">
-                <a type="button" class="btn btn-secondary btn-md" href="#">Restock</a>
+                <a type="button" class="btn btn-secondary btn-md" th:href="@{'/gudang/' + ${gudang.id} + '/restock-barang'}">Restock</a>
             </div>
         </div>
         <div class="row justify-content-center">
@@ -42,20 +42,30 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="barang : ${gudang.barangList}">
-                                    <td th:text="${barang.sku}"></td>
-                                    <td th:text="${barang.tipeBarang}"></td>
+                                <tr th:each="barang : ${barangList}">
+                                    <td><a th:href="@{'/barang/' + ${barang.sku}}"><span th:text="${barang.sku}"></span></a></td>
+                                    <td>
+                                        <span th:switch="${barang.tipeBarang}">
+                                            <span th:case="1">Produk Elektronik</span>
+                                            <span th:case="2">Pakaian & Aksesoris</span>
+                                            <span th:case="3">Makanan & Minuman</span>
+                                            <span th:case="4">Kosmetik</span>
+                                            <span th:case="5">Perlengkapan Rumah</span>
+                                            <span th:case="*">Tipe Barang Tidak Diketahui</span>
+                                        </span>
+                                    </td>
                                     <td th:text="${barang.merk}"></td>
                                     <td th:text="${barang.hargaBarang}"></td>
                                 </tr>
                             </tbody>
+                            
                         </table>
                     </div>
                 </div>
             </div>
         </div>
         <div class="text-center m-3">
-            <a type="button" class="btn btn-primary btn-md" href="/gudang/viewall">Kembali</a>
+            <a type="button" class="btn btn-primary btn-md" href="/gudang">Kembali</a>
         </div>
     </div>
 </body>

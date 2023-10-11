@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <title>Daftar Permintaan Pengiriman</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Daftar Permintaan Pengiriman</h1>
+        <!-- Other content and buttons here -->
+        <table id="permintaanPengirimanTable" class="display">
+            <thead>
+                <tr>
+                    <th>Nomor</th>
+                    <th>Waktu Permintaan</th>
+                    <th>Nomor Pengiriman</th>
+                    <th>Nama Penerima</th>
+                    <th>Alamat Penerima</th>
+                    <th>Tanggal Pengiriman</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Iterate over the listPermintaanPengiriman and generate rows -->
+                <tr th:each="permintaan, iterStat : ${listPermintaanPengiriman}">
+                    <td th:text="${iterStat.index + 1}"></td>
+                    <td th:text="${permintaan.waktuPermintaan}"></td>
+                    <td th:text="${permintaan.nomorPengiriman}"></td>
+                    <td th:text="${permintaan.namaPenerima}"></td>
+                    <td th:text="${permintaan.alamatPenerima}"></td>
+                    <td th:text="${permintaan.tanggalPengiriman}"></td> <!-- Use the correct variable name -->
+                    <td>
+                        <a type="button" class="btn btn-md btn-primary" th:href="@{/permintaan-pengiriman/{id}(id=${permintaan.nomorPengiriman})}">Detail</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Initialize DataTables -->
+    <script>
+        $(document).ready(function () {
+            $('#permintaanPengirimanTable').DataTable({
+                "columnDefs": [
+                    { "orderable": false, "targets": -1 } // Disable sorting for the last column (Action)
+                ],
+                "lengthMenu": [5, 10, 20], // Number of items per page
+                "pageLength": 10 // Initial page length
+            });
+        });
+    </script>
+</body>
+
+</html>

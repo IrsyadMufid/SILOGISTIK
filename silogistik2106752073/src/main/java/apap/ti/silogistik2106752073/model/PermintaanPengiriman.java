@@ -6,8 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.*;
 
-
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,7 +27,7 @@ public class PermintaanPengiriman {
     private String nomorPengiriman;
 
     @Column(name = "is_cancelled", nullable = false)
-    private Boolean isCancelled;
+    private Boolean isCancelled = false;
 
     @Column(name = "nama_penerima", nullable = false)
     private String namaPenerima;
@@ -37,18 +39,19 @@ public class PermintaanPengiriman {
     private Date tanggalPengiriman;
 
     @Column(name = "biaya_pengiriman", nullable = false)
-    private Integer biayaPengiriman;
+    private Double biayaPengiriman;
 
     @Column(name = "jenis_layanan", nullable = false)
     private Integer jenisLayanan;
 
     @Column(name = "waktu_permintaan", nullable = false)
-    private Date waktuPermintaan;
+    private LocalDateTime waktuPermintaan;
 
     @ManyToOne
     @JoinColumn(name = "id_karyawan", nullable = false)
     private Karyawan karyawan;
 
-    // Buat getter dan setter
+    @OneToMany(mappedBy = "permintaanPengiriman", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PermintaanPengirimanBarang> barangList;
 }
 

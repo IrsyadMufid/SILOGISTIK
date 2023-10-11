@@ -18,11 +18,8 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "BARANG")
 public class Barang {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
 
+    @Id
     @Column(name = "sku", nullable = false, unique = true, length = 7)
     private String sku;
 
@@ -35,10 +32,9 @@ public class Barang {
     @Column(name = "harga_barang", nullable = false)
     private Long hargaBarang;
 
-    @ManyToMany(mappedBy = "barangList", fetch = FetchType.LAZY)
-    
-    @JsonIgnoreProperties("barangList")
-    private List<Gudang> gudangList;
+    @OneToMany(mappedBy = "barang", cascade = CascadeType.ALL)
+    private List<GudangBarang> gudangBarangList;
 
-    // Buat getter dan setter
+    // Getter and Setter for all fields
 }
+

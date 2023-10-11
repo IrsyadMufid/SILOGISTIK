@@ -5,10 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -17,22 +13,27 @@ import jakarta.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "GUDANG")
-public class Gudang {
+@Table(name = "GUDANG_BARANG")
+public class GudangBarang {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "nama", nullable = false)
-    private String nama;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_gudang", referencedColumnName = "id")
+    @NotNull
+    private Gudang gudang;
 
-    @Column(name = "alamat_gudang", nullable = false)
-    private String alamatGudang;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "sku_barang", referencedColumnName = "sku")
+    @NotNull
+    private Barang barang;
 
-    @OneToMany(mappedBy = "gudang", cascade = CascadeType.ALL)
-    private List<GudangBarang> gudangBarangList;
+    @Column(name = "stok", nullable = false)
+    @NotNull
+    private Integer stok = 0;
 
     // Getter and Setter for all fields
 }
