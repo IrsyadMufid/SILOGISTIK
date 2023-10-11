@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <title>Detail Permintaan Pengiriman</title>
+    <!-- Atur atribut lainnya di sini -->
+</head>
+<body>
+    <div class="container mt-5">
+        <th:block th:if="${detailPermintaanPengiriman != null}">
+            <h2>Detail Permintaan Pengiriman</h2>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Nomor Permintaan Pengiriman</th>
+                        <td th:text="${detailPermintaanPengiriman.nomorPermintaanPengiriman}"></td>
+                    </tr>
+                    <tr>
+                        <th>Waktu Permintaan</th>
+                        <td th:text="${detailPermintaanPengiriman.waktuPermintaan}"></td>
+                    </tr>
+                    <tr>
+                        <th>Karyawan yang Bertugas</th>
+                        <td th:text="${detailPermintaanPengiriman.karyawan.nama}"></td>
+                    </tr>
+                    <tr>
+                        <th>Waktu Pengiriman</th>
+                        <td th:text="${detailPermintaanPengiriman.tanggalPengiriman}"></td>
+                    </tr>
+                    <tr>
+                        <th>Nama Penerima</th>
+                        <td th:text="${detailPermintaanPengiriman.namaPenerima}"></td>
+                    </tr>
+                    <tr>
+                        <th>Alamat Penerima</th>
+                        <td th:text="${detailPermintaanPengiriman.alamatPenerima}"></td>
+                    </tr>
+                    <tr>
+                        <th>Jenis Layanan</th>
+                        <td>
+                            <span th:switch="${detailPermintaanPengiriman.jenisLayanan}">
+                                <span th:case="1">Same Day</span>
+                                <span th:case="2">Kilat</span>
+                                <span th:case="3">Reguler</span>
+                                <span th:case="4">Hemat</span>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Biaya Pengiriman</th>
+                        <td th:text="${detailPermintaanPengiriman.biayaPengiriman}"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Tambahkan tabel untuk daftar barang pesanan -->
+            <h3>Daftar Barang yang Dipesan</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>SKU</th>
+                        <th>Kuantitas Pesanan</th>
+                        <th>Total Harga</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loop melalui daftar barang pesanan -->
+<!-- Loop melalui daftar barang pesanan -->
+                <th:block th:each="barang, iterStat : ${detailPermintaanPengiriman.daftarBarang}">
+                    <tr>
+                        <td th:text="${iterStat.count}"></td>
+                        <td th:text="${barang.barang.sku}"></td>
+                        <td th:text="${barang.kuantitasPesanan}"></td>
+                        <td th:text="${barang.totalHarga}"></td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+        </th:block>
+
+        <th:block th:if="${detailPermintaanPengiriman == null}">
+            <div class="alert alert-danger" role="alert">
+                Permintaan pengiriman tidak ditemukan.
+            </div>
+        </th:block>
+    </div>
+</body>
+</html>

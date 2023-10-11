@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import apap.ti.silogistik2106752073.dto.DetailPermintaanPengirimanDTO;
 import apap.ti.silogistik2106752073.dto.PermintaanPengirimanRequestDTO;
 import apap.ti.silogistik2106752073.dto.ReadListPermintaanPengirimanDTO;
 import apap.ti.silogistik2106752073.model.Barang;
@@ -34,6 +36,9 @@ public class PermintaanPengirimanController {
 
     @Autowired
     private PermintaanPengirimanMapper permintaanPengirimanMapper;
+
+    @Autowired
+    private PermintaanPengirimanService detailPermintaanPengirimanService;
     
 // Perbaikan di method showForm
 // @GetMapping
@@ -105,5 +110,12 @@ public String addRowBarang(@ModelAttribute PermintaanPengirimanRequestDTO permin
     return "form-tambah-permintaan-pengiriman";
 } 
 
+
+@GetMapping("/{idPermintaanPengiriman}")
+public String detailPermintaanPengiriman(@PathVariable Long idPermintaanPengiriman, Model model) {
+    DetailPermintaanPengirimanDTO detailDTO = detailPermintaanPengirimanService.getDetailPermintaanPengirimanById(idPermintaanPengiriman);
+    model.addAttribute("detailPermintaanPengiriman", detailDTO);
+    return "detail-permintaan-pengiriman"; // Sesuaikan dengan nama tampilan yang sesuai
+}
 }
 

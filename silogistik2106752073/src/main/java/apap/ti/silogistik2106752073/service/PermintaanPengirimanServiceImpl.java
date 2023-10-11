@@ -10,23 +10,33 @@ import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import apap.ti.silogistik2106752073.dto.BarangDetailDTO;
+import apap.ti.silogistik2106752073.dto.DetailPermintaanPengirimanDTO;
 import apap.ti.silogistik2106752073.dto.PermintaanPengirimanRequestDTO;
 import apap.ti.silogistik2106752073.dto.ReadListPermintaanPengirimanDTO;
 import apap.ti.silogistik2106752073.model.Karyawan;
 import apap.ti.silogistik2106752073.model.PermintaanPengiriman;
 import apap.ti.silogistik2106752073.model.PermintaanPengirimanBarang;
 import apap.ti.silogistik2106752073.repository.PermintaanPengirimanDb;
+import apap.ti.silogistik2106752073.response.BarangMapper;
+import apap.ti.silogistik2106752073.response.PermintaanPengirimanMapper;
 
 @Service
 public class PermintaanPengirimanServiceImpl implements PermintaanPengirimanService {
 
     @Autowired
-    private PermintaanPengirimanDb permintaanPengirimandDb;
+    private PermintaanPengirimanDb permintaanPengirimanDb;
 
+    @Autowired
+    private PermintaanPengirimanMapper permintaanPengirimanMapper;
+
+    @Autowired
+    private BarangMapper barangMapper;
 
     @Override
 public String generateUniqueNomorPengiriman(PermintaanPengirimanRequestDTO requestDTO) {
@@ -81,7 +91,7 @@ public String generateUniqueNomorPengiriman(PermintaanPengirimanRequestDTO reque
     
       @Override
     public List<PermintaanPengiriman> getAllPermintaanPengirimans() {
-        return permintaanPengirimandDb.findAll();
+        return permintaanPengirimanDb.findAll();
     }
 
     @Override
@@ -90,13 +100,13 @@ public String generateUniqueNomorPengiriman(PermintaanPengirimanRequestDTO reque
         for(PermintaanPengirimanBarang permintaanPengirimanBarang : permintaanPengiriman.getBarangList()){
             permintaanPengirimanBarang.setPermintaanPengiriman(permintaanPengiriman);
         }
-        permintaanPengirimandDb.save(permintaanPengiriman);
+        permintaanPengirimanDb.save(permintaanPengiriman);
     }
 
     
 @Override
 public List<ReadListPermintaanPengirimanDTO> getAllPermintaanPengirimanAsDTO() {
-    List<PermintaanPengiriman> listPermintaanPengiriman = permintaanPengirimandDb.findAll();
+    List<PermintaanPengiriman> listPermintaanPengiriman = permintaanPengirimanDb.findAll();
     List<ReadListPermintaanPengirimanDTO> listDTO = new ArrayList<>();
 
     DateTimeFormatter waktuPermintaanFormatter = DateTimeFormatter.ofPattern("d-MM-yyyy, HH:mm:ss");
@@ -104,6 +114,7 @@ public List<ReadListPermintaanPengirimanDTO> getAllPermintaanPengirimanAsDTO() {
 
     for (PermintaanPengiriman permintaan : listPermintaanPengiriman) {
         ReadListPermintaanPengirimanDTO dto = new ReadListPermintaanPengirimanDTO();
+        dto.setId(permintaan.getId());
         dto.setNomorPengiriman(permintaan.getNomorPengiriman());
         
         // Format waktuPermintaan with date and time
@@ -122,6 +133,36 @@ public List<ReadListPermintaanPengirimanDTO> getAllPermintaanPengirimanAsDTO() {
 
     return listDTO;
 }
+
+
+
+
+@Override
+public DetailPermintaanPengirimanDTO getDetailPermintaanPengirimanById(Long idPermintaanPengiriman) {
+    PermintaanPengiriman permintaanPengiriman = permintaanPengirimanDb.findById(idPermintaanPengiriman).orElse(null);
+    if (permintaanPengiriman != null) {
+        DetailPermintaanPengirimanDTO detailDTO = permintaanPengirimanMapper.entityToDTO(permintaanPengiriman);
+
+        // Menggunakan mapper untuk mengubah entitas PermintaanPengirimanBarang menjadi BarangDetailDTO
+        List<BarangDetailDTO> daftarBarangDTO = new ArrayList<>();
+        for (PermintaanPengirimanBarang barang : permintaanPengiriman.getBarangList()) {
+            
+            BarangDetailDTO barangDTO = barangMapper.toBarangDetailDTO(barang);
+            // Hitung totalHarga berdasarkan hargaBarang dan kuantitasPesanan
+            barangDTO.setTotalHarga(barang.getBarang().getHargaBarang() * barang.getKuantitasPesanan());
+            daftarBarangDTO.add(barangDTO);
+        }
+        
+
+        // Set daftar barang dalam objek DetailPermintaanPengirimanDTO
+        detailDTO.setDaftarBarang(daftarBarangDTO);
+
+        return detailDTO;
+    }
+    return null; // Handle jika permintaan pengiriman tidak ditemukan
+}
+
+
 
 
 

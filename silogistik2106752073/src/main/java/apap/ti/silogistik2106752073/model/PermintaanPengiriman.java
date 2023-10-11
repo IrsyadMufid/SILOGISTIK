@@ -20,7 +20,7 @@ import java.util.List;
 public class PermintaanPengiriman {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "nomor_pengiriman", nullable = false, unique = true, length = 16)

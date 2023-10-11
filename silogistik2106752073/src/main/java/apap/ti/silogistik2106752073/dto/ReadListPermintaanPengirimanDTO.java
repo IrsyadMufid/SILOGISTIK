@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReadListPermintaanPengirimanDTO {
+    private Long id;
     private String nomorPengiriman;
     private String waktuPermintaan;
     private String namaPenerima;

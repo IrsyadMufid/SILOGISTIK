@@ -35,7 +35,7 @@
                     <td th:text="${permintaan.alamatPenerima}"></td>
                     <td th:text="${permintaan.tanggalPengiriman}"></td> <!-- Use the correct variable name -->
                     <td>
-                        <a type="button" class="btn btn-md btn-primary" th:href="@{/permintaan-pengiriman/{id}(id=${permintaan.nomorPengiriman})}">Detail</a>
+                        <a type="button" class="btn btn-md btn-primary" th:href="@{'/permintaan-pengiriman/' + ${permintaan.id}}">Detail</a>
                     </td>
                 </tr>
             </tbody>
