@@ -7,36 +7,55 @@
     <meta charset="UTF-8" />
     <title>Restock Barang</title>
 </head>
-
 <body>
-    <h2>Restock Barang</h2>
-    <form th:action="@{'/gudang/' + ${gudang.id} + '/restock-barang'}" th:object="${restockForm}" method="post">
-        <input type="hidden" th:name="gudangId" th:value="${gudang.id}" />
+    <nav th:replace="~{fragments/navbar}"></nav>
+    <div class="container d-flex justify-content-center">
+        <div class="card col-8 my-5" style="width: 100%;">
+            <div class="card-header text-center">
+                <h2>Restock Barang</h2>
+            </div>
 
-        <table>
-            <tr>
-                <th>Barang</th>
-                <th>Jumlah Stok</th>
-                <th>Action</th>
-            </tr>
-            <tr th:each="restockItem, iterStat : *{restockItems}">
-                <td>
-                    <select th:field="*{restockItems[__${iterStat.index}__].barangSku}" class="form-control">
-                        <option th:each="barang : ${listBarang}" th:value="${barang.sku}" th:text="${barang.merk + ' - ' + barang.sku}" />
-                    </select>
-                </td>
-                <td>
-                    <input type="number" th:field="*{restockItems[__${iterStat.index}__].stok}" />
-                </td>
-                <td>
-                    <button type="submit" name="addRow" th:if="${iterStat.index == 0}" class="btn btn-primary">Tambah Baris</button>
-                    <button type="submit" name="deleteRow" th:if="${iterStat.index != 0}" th:value="${iterStat.index}" class="btn btn-danger">Hapus</button>
-                </td>
-            </tr>
-        </table>
+            <!-- Tampilkan Nama Gudang dan Alamat Gudang -->
+            <div class="card-body">
+                <p><strong>Nama Gudang:</strong> <span th:text="${gudang.nama}"></span></p>
+                <p><strong>Alamat Gudang:</strong> <span th:text="${gudang.alamatGudang}"></span></p>
+            </div>
 
-        <button type="submit" class="btn btn-primary">Restock</button>
-    </form>
+            <div class="text-end">
+                <button type="submit" name="addRow" class="btn btn-primary">+ Tambah Barang</button>
+            </div>
+
+            <form th:action="@{'/gudang/' + ${gudang.id} + '/restock-barang'}" th:object="${restockForm}" method="post">
+                <input type="hidden" th:name="gudangId" th:value="${gudang.id}" />
+                <table class="table table-bordered">
+                    <thead class="bg-dark text-white">
+                        <tr>
+                            <th class="font-weight-bold">#</th>
+                            <th class="font-weight-bold">Barang</th>
+                            <th class="font-weight-bold">Jumlah Stok</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="restockItem, iterStat : *{restockItems}">
+                            <td th:text="${iterStat.index + 1}"></td>
+                            <td>
+                                <select th:field="*{restockItems[__${iterStat.index}__].barangSku}" class="form-control">
+                                    <option th:each="barang : ${listBarang}" th:value="${barang.sku}" th:text="${barang.merk + ' - ' + barang.sku}" />
+                                </select>
+                            </td>
+                            <td>
+                                <input type="number" th:field="*{restockItems[__${iterStat.index}__].stok}" class="form-control" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="text-center mt-3">
+                    <a th:href="@{'/gudang/' + ${gudang.id}}" class="btn btn-danger ml-2">Batal</a>
+                    <button type="submit" class="btn btn-primary">Restock</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
-
 </html>

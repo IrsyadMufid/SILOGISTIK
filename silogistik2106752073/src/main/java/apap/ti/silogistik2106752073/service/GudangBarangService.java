@@ -15,6 +15,7 @@ public interface GudangBarangService {
     List<GudangBarang> getAllGudangBarang();
     List<Gudang> findGudangByBarangSku(String skuBarang);
     Integer findStokByBarangAndGudang(Barang barang, Gudang gudang);
+    Integer findStokByGudangIdAndBarangSku(Long gudangId, String sku);
 
 
 }

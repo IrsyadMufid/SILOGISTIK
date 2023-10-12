@@ -1,14 +1,18 @@
 package apap.ti.silogistik2106752073.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import apap.ti.silogistik2106752073.dto.DetailPermintaanPengirimanDTO;
+import apap.ti.silogistik2106752073.dto.PermintaanPengirimanDTO;
 import apap.ti.silogistik2106752073.dto.PermintaanPengirimanRequestDTO;
 import apap.ti.silogistik2106752073.dto.ReadListPermintaanPengirimanDTO;
 import apap.ti.silogistik2106752073.model.Barang;
@@ -88,6 +92,20 @@ public String submitFormTambahPermintaanPengiriman(@ModelAttribute PermintaanPen
     // Redirect ke halaman daftar permintaan pengiriman
     return "redirect:/permintaan-pengiriman/tambah";
 }
+@GetMapping("/{idPermintaanPengiriman}/cancel")
+public String cancelPermintaanPengiriman(@PathVariable Long idPermintaanPengiriman, Model model) {
+    String nomorPengiriman = permintaanPengirimanService.cancelPermintaanPengiriman(idPermintaanPengiriman);
+    if (nomorPengiriman != null) {
+        model.addAttribute("nomorPengiriman", nomorPengiriman);
+        return "success-cancel-permintaan-pengiriman";
+    } else {
+        return "failed-cancel-permintaan-pengiriman";
+    }
+}
+
+
+
+
 
 @PostMapping(value = "/tambah", params = {"addRow"})
 public String addRowBarang(@ModelAttribute PermintaanPengirimanRequestDTO permintaanPengirimanRequestDTO, Model model) {
@@ -117,5 +135,36 @@ public String detailPermintaanPengiriman(@PathVariable Long idPermintaanPengirim
     model.addAttribute("detailPermintaanPengiriman", detailDTO);
     return "detail-permintaan-pengiriman"; // Sesuaikan dengan nama tampilan yang sesuai
 }
+
+
+@GetMapping("/filter-permintaan-pengiriman")
+public String filterPermintaanPengiriman(
+    @RequestParam(name = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+    @RequestParam(name = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+    @RequestParam(name = "sku", required = false) String sku,
+    Model model
+) {
+    List<PermintaanPengirimanDTO> listPermintaanPengiriman;
+
+    if (startDate != null && endDate != null && sku != null) {
+        // Jika ada parameter pencarian, lakukan pencarian
+        listPermintaanPengiriman = permintaanPengirimanService.getPermintaanPengirimanByDateRangeAndSKU(startDate, endDate, sku);
+    } else {
+        // Jika tidak ada parameter pencarian, tampilkan semua permintaan pengiriman
+        List<PermintaanPengiriman> listPermintaanPengirimanEntities = permintaanPengirimanService.getAllPermintaanPengiriman();
+        listPermintaanPengiriman = listPermintaanPengirimanEntities.stream()
+                .map(permintaanPengirimanMapper::convertToDto) // Mengkonversi ke DTO
+                .collect(Collectors.toList());
+    }
+    List<Barang> listBarangExisting = barangService.getAllBarang();
+    model.addAttribute("listBarangExisting", listBarangExisting);
+    // Kirim daftar barang yang dapat dipilih ke tampilan (dropdown)
+    model.addAttribute("listBarangExisting", barangService.getAllBarang());
+    model.addAttribute("listPermintaanPengiriman", listPermintaanPengiriman);
+    return "filter-permintaan-pengiriman";
+}
+
+// 
+
 }
 

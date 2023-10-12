@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: css}" th:remove="tag">
+    </object>
+    <title>Hasil Filter Permintaan Pengiriman</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Hasil Filter Permintaan Pengiriman</h1>
+        <!-- Form untuk input tanggal awal, tanggal akhir, dan SKU -->
+        <form method="get" th:action="@{'/permintaan-pengiriman/filter-permintaan-pengiriman'}">
+            <div class="form-group">
+                <label for="startDate">Tanggal Awal:</label>
+                <input type="datetime-local" id="startDate" name="startDate" class="form-control" required placeholder="2023-10-12T00:00:00">
+            </div>
+            <div class="form-group">
+                <label for="endDate">Tanggal Akhir:</label>
+                <input type="datetime-local" id="endDate" name="endDate" class="form-control" required placeholder="2023-10-11T00:00:00">
+            </div>
+            <div class="form-group">
+                <label for="barangSku">Barang:</label>
+                <select id="barangSku" name="sku" class="form-control">
+                    <option th:each="barangExisting : ${listBarangExisting}" th:value="${barangExisting.sku}" th:text="${barangExisting.merk}"></option>
+                </select>
+            </div>
+            </div>            
+            <button type="submit" class="btn btn-primary">Cari</button>
+        </form>
+
+        <!-- Tabel untuk menampilkan hasil filter -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nomor Pengiriman</th>
+                    <th>Nama Penerima</th>
+                    <th>Alamat Penerima</th>
+                    <th>Tanggal Pengiriman</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Iterate over the listPermintaanPengiriman and generate rows -->
+                <tr th:each="permintaan : ${listPermintaanPengiriman}">
+                    <td th:text="${permintaan.nomorPengiriman}"></td>
+                    <td th:text="${permintaan.namaPenerima}"></td>
+                    <td th:text="${permintaan.alamatPenerima}"></td>
+                    <td th:text="${permintaan.tanggalPengiriman}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import apap.ti.silogistik2106752073.dto.BarangDetailDTO;
 import apap.ti.silogistik2106752073.dto.DetailPermintaanPengirimanDTO;
+import apap.ti.silogistik2106752073.dto.PermintaanPengirimanDTO;
 import apap.ti.silogistik2106752073.dto.PermintaanPengirimanRequestDTO;
 import apap.ti.silogistik2106752073.dto.ReadListPermintaanPengirimanDTO;
 import apap.ti.silogistik2106752073.model.Karyawan;
@@ -89,10 +90,9 @@ public String generateUniqueNomorPengiriman(PermintaanPengirimanRequestDTO reque
     
     
     
-      @Override
-    public List<PermintaanPengiriman> getAllPermintaanPengirimans() {
-        return permintaanPengirimanDb.findAll();
-    }
+public List<PermintaanPengiriman> getAllPermintaanPengiriman() {
+    return permintaanPengirimanDb.findAll();
+}
 
     @Override
     public void savePermintaanPengiriman(PermintaanPengiriman permintaanPengiriman) {
@@ -102,6 +102,20 @@ public String generateUniqueNomorPengiriman(PermintaanPengirimanRequestDTO reque
         }
         permintaanPengirimanDb.save(permintaanPengiriman);
     }
+
+// Testing cancel
+//     @Override
+// public void savePermintaanPengiriman(PermintaanPengiriman permintaanPengiriman) {
+//     // Simulate the creation time to be more than 24 hours ago (e.g., 2 days ago)
+//     LocalDateTime waktuPermintaan = LocalDateTime.now().minusDays(2);
+//     permintaanPengiriman.setWaktuPermintaan(waktuPermintaan);
+
+//     for (PermintaanPengirimanBarang permintaanPengirimanBarang : permintaanPengiriman.getBarangList()) {
+//         permintaanPengirimanBarang.setPermintaanPengiriman(permintaanPengiriman);
+//     }
+//     permintaanPengirimanDb.save(permintaanPengiriman);
+// }
+
 
     
 @Override
@@ -143,16 +157,25 @@ public DetailPermintaanPengirimanDTO getDetailPermintaanPengirimanById(Long idPe
     if (permintaanPengiriman != null) {
         DetailPermintaanPengirimanDTO detailDTO = permintaanPengirimanMapper.entityToDTO(permintaanPengiriman);
 
+        // Format waktuPermintaan
+        DateTimeFormatter waktuPermintaanFormatter = DateTimeFormatter.ofPattern("d-MM-yyyy, HH:mm:ss");
+        String formattedWaktuPermintaan = permintaanPengiriman.getWaktuPermintaan().format(waktuPermintaanFormatter);
+        detailDTO.setWaktuPermintaan(formattedWaktuPermintaan);
+
+        // Format tanggalPengiriman
+        DateTimeFormatter tanggalPengirimanFormatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+        LocalDateTime localDateTime = permintaanPengiriman.getTanggalPengiriman().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        String formattedTanggalPengiriman = localDateTime.format(tanggalPengirimanFormatter);
+        detailDTO.setTanggalPengiriman(formattedTanggalPengiriman);
+
         // Menggunakan mapper untuk mengubah entitas PermintaanPengirimanBarang menjadi BarangDetailDTO
         List<BarangDetailDTO> daftarBarangDTO = new ArrayList<>();
         for (PermintaanPengirimanBarang barang : permintaanPengiriman.getBarangList()) {
-            
             BarangDetailDTO barangDTO = barangMapper.toBarangDetailDTO(barang);
             // Hitung totalHarga berdasarkan hargaBarang dan kuantitasPesanan
             barangDTO.setTotalHarga(barang.getBarang().getHargaBarang() * barang.getKuantitasPesanan());
             daftarBarangDTO.add(barangDTO);
         }
-        
 
         // Set daftar barang dalam objek DetailPermintaanPengirimanDTO
         detailDTO.setDaftarBarang(daftarBarangDTO);
@@ -162,13 +185,63 @@ public DetailPermintaanPengirimanDTO getDetailPermintaanPengirimanById(Long idPe
     return null; // Handle jika permintaan pengiriman tidak ditemukan
 }
 
+@Override
+public String cancelPermintaanPengiriman(Long idPermintaanPengiriman) {
+    PermintaanPengiriman permintaanPengiriman = permintaanPengirimanDb.findById(idPermintaanPengiriman).orElse(null);
+    if (permintaanPengiriman != null) {
+        // Cek apakah permintaan ini dibuat dalam 24 jam terakhir
+        LocalDateTime waktuPembuatan = permintaanPengiriman.getWaktuPermintaan();
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime limit = now.minusHours(24);
+
+        if (waktuPembuatan.isAfter(limit)) {
+            // Hapus barang-barang terkait (optional)
+            // permintaanPengiriman.getBarangList().clear();
+
+            // Set isCancelled menjadi true
+            permintaanPengiriman.setIsCancelled(true);
+            permintaanPengirimanDb.save(permintaanPengiriman);
+            return permintaanPengiriman.getNomorPengiriman();
+        } else {
+            // Handle jika permintaan tidak bisa dibatalkan karena sudah melewati 24 jam
+            // Misalnya dengan melempar pengecualian atau memberikan pesan kesalahan
+        }
+    }
+    return null; // Handle jika permintaan tidak ditemukan
+}
 
 
 
 
 
+@Override
+public List<PermintaanPengirimanDTO> getPermintaanPengirimanByDateRangeAndSKU(LocalDateTime startDate, LocalDateTime endDate, String sku) {
+    List<PermintaanPengiriman> listPermintaanPengiriman = permintaanPengirimanDb.findAllByWaktuPermintaanBetweenAndBarangList_Barang_Sku(startDate, endDate, sku);
+
+    // Buat daftar DTO untuk menyimpan hasil yang sesuai
+    List<PermintaanPengirimanDTO> result = new ArrayList<>();
+
+    for (PermintaanPengiriman permintaan : listPermintaanPengiriman) {
+        for (PermintaanPengirimanBarang ppb : permintaan.getBarangList()) {
+            // Cek apakah SKU dari entitas Barang cocok dengan SKU yang dicari
+            if (ppb.getBarang().getSku().equals(sku)) {
+                PermintaanPengirimanDTO dto = new PermintaanPengirimanDTO();
+                dto.setId(permintaan.getId());
+                dto.setNomorPengiriman(permintaan.getNomorPengiriman());
+                dto.setWaktuPermintaan(permintaan.getWaktuPermintaan());
+                dto.setNamaPenerima(permintaan.getNamaPenerima());
+                dto.setAlamatPenerima(permintaan.getAlamatPenerima());
+
+                // Anda dapat mengakses barangList dari PermintaanPengirimanDTO yang sesuai
+                dto.setBarangList(permintaan.getBarangList());
+
+                result.add(dto);
+            }
+        }
+    }
+
+    return result;
+}
 
 
-    
-    
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import apap.ti.silogistik2106752073.model.Barang;
 import apap.ti.silogistik2106752073.model.Gudang;
 import apap.ti.silogistik2106752073.model.GudangBarang;
+import apap.ti.silogistik2106752073.repository.GudangBarangDb;
 import apap.ti.silogistik2106752073.repository.GudangDb;
 
 
@@ -14,6 +15,9 @@ import apap.ti.silogistik2106752073.repository.GudangDb;
 public class GudangServiceImpl implements GudangService {
     @Autowired
     private GudangDb gudangDb;
+
+    @Autowired
+    private GudangBarangDb gudangBarangDb;
 
     @Override
     public List<Gudang> getAllGudang() {
@@ -73,5 +77,8 @@ public List<Barang> getBarangByGudangId(Long idGudang) {
     }
     return Collections.emptyList();
 }
+
 }
+
+
 

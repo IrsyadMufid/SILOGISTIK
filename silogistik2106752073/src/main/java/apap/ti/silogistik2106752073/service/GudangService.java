@@ -10,4 +10,5 @@ public interface GudangService {
     Gudang findGudangByBarangSku(String sku);
     void restockBarang(Gudang gudang, Barang barang, int jumlahStok);
     List<Barang> getBarangByGudangId(Long idGudang);
+    
 }

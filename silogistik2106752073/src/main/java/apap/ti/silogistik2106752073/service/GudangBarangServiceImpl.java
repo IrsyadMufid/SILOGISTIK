@@ -58,6 +58,8 @@ public class GudangBarangServiceImpl implements GudangBarangService {
 
         return gudangList;
 }
+
+@Override
 public Integer findStokByBarangAndGudang(Barang barang, Gudang gudang) {
     GudangBarang gudangBarang = gudangBarangDb.findByBarangAndGudang(barang, gudang);
     if (gudangBarang != null) {
@@ -66,6 +68,14 @@ public Integer findStokByBarangAndGudang(Barang barang, Gudang gudang) {
     return 0; // Jika tidak ditemukan, kembalikan stok 0
 }
 
+@Override
+public Integer findStokByGudangIdAndBarangSku(Long gudangId, String sku) {
+    GudangBarang gudangBarang = gudangBarangDb.findByGudangIdAndBarangSku(gudangId, sku);
+    if (gudangBarang != null) {
+        return gudangBarang.getStok();
+    }
+    return 0; // Jika tidak ditemukan, kembalikan stok 0
+}
 
 
     

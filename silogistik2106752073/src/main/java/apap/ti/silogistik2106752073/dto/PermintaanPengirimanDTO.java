@@ -1,9 +1,10 @@
 package apap.ti.silogistik2106752073.dto;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
-import apap.ti.silogistik2106752073.model.Karyawan;
+import apap.ti.silogistik2106752073.model.PermintaanPengirimanBarang;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,18 +12,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DetailPermintaanPengirimanDTO {
+public class PermintaanPengirimanDTO {
     private Long id;
     private String nomorPengiriman;
-    private String waktuPermintaan;
-    private Karyawan karyawan;
-    private String tanggalPengiriman;
+    private Date tanggalPengiriman;
+    private LocalDateTime waktuPermintaan;
     private String namaPenerima;
     private String alamatPenerima;
-    private String jenisLayanan;
-    private Double biayaPengiriman;
-    private List<BarangDetailDTO> daftarBarang;
-
+    private List<PermintaanPengirimanBarang> barangList;
 }
-    
-

@@ -1,6 +1,9 @@
 package apap.ti.silogistik2106752073.controller;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -77,6 +80,14 @@ public String cariBarang(@RequestParam(value = "sku", required = false) String s
     if (sku != null) {
         List<Gudang> listGudang = gudangBarangService.findGudangByBarangSku(sku); // Gantilah ini dengan logika yang sesuai
         model.addAttribute("listGudang", listGudang);
+
+        // Mengambil stok untuk setiap gudang dan menyimpannya dalam Map
+        Map<Long, Integer> stokMap = new HashMap<>();
+        for (Gudang gudang : listGudang) {
+            Integer stok = gudangBarangService.findStokByGudangIdAndBarangSku(gudang.getId(), sku);
+            stokMap.put(gudang.getId(), stok);
+        }
+        model.addAttribute("stokMap", stokMap);
     }
 
     return "cari-barang"; // Nama template Thymeleaf untuk halaman pencarian dan hasil pencarian
@@ -84,10 +95,10 @@ public String cariBarang(@RequestParam(value = "sku", required = false) String s
 
 
 
-@PostMapping("/{idGudang}/restock-barang")
-public String restockBarang(@PathVariable("idGudang") Long idGudang, @ModelAttribute RestockForm restockForm) {
-    Gudang gudang = gudangService.getGudangById(idGudang);
 
+@PostMapping("/{idGudang}/restock-barang")
+public String restockBarang(@PathVariable("idGudang") Long idGudang, @ModelAttribute RestockForm restockForm, Model model) {
+    Gudang gudang = gudangService.getGudangById(idGudang);
     for (RestockItem restockItem : restockForm.getRestockItems()) {
         if (restockItem.getBarangSku() != null && restockItem.getStok() > 0) {
             // Ambil objek Barang berdasarkan SKU

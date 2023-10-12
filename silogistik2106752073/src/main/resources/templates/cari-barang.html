@@ -5,48 +5,51 @@
     <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
     <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
     <title>Cari Barang</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+    <nav th:replace="~{fragments/navbar}"></nav>
     <div class="container mt-5">
-        <h2>Cari Ketersediaan Barang</h2>
-        <form th:action="@{/gudang/cari-barang}" method="get">
+        <h2 class="text-center">Cari Ketersediaan Barang</h2>
+        <form th:action="@{/gudang/cari-barang}" method="get" class="zjustify-content-center">
             <div class="form-group">
-                <label for="sku">Pilih Barang:</label>
+                <label for="sku">Pilih Barang</label>
                 <select class="form-control" id="sku" name="sku">
                     <option value="">Pilih Barang</option>
                     <option th:each="barang : ${daftarBarang}" th:value="${barang.sku}" th:text="${barang.merk + ' - ' + barang.sku}"></option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Cari</button>
+            <button type="submit" class="btn btn-primary ml-2">Cari</button>
         </form>
 
         <!-- Tampilkan daftar gudang jika hasil pencarian tersedia -->
-        <th:block th:if="${listGudang != null}">
-            <h3>Hasil Pencarian Ketersediaan Barang</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>ID Gudang</th>
-                        <th>Nama Gudang</th>
-                        <th>Alamat Gudang</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Loop melalui daftar gudang dan tampilkan informasi gudang -->
-                    <th:block th:each="gudang : ${listGudang}">
-                        <tr>
-                            <td th:text="${gudang.id}"></td>
-                            <td>
-                                <!-- Hyperlink ke halaman detail gudang -->
-                                <a th:href="@{'/gudang/' + ${gudang.id}}" th:text="${gudang.nama}"></a>
-                            </td>
-                            <td th:text="${gudang.alamatGudang}"></td>
-                        </tr>
-                    </th:block>
-                </tbody>
-            </table>
-        </th:block>
+<!-- Tampilkan daftar gudang jika hasil pencarian tersedia -->
+<th:block th:if="${listGudang != null}">
+    <table class="table mt-4">
+        <thead class="bg-dark text-white">
+            <tr>
+                <th class="font-weight-bold">#</th>
+                <th class="font-weight-bold">Nama Gudang</th>
+                <th class="font-weight-bold">Alamat Gudang</th>
+                <th class="font-weight-bold">Stok</th> <!-- Kolom untuk stok -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop melalui daftar gudang dan tampilkan informasi gudang -->
+            <th:block th:each="gudang, iterStat : ${listGudang}">
+                <tr>
+                    <td th:text="${iterStat.index + 1}"></td>
+                    <td>
+                        <!-- Hyperlink ke halaman detail gudang -->
+                        <a th:href="@{'/gudang/' + ${gudang.id}}" th:text="${gudang.nama}"></a>
+                    </td>
+                    <td th:text="${gudang.alamatGudang}"></td>
+                    <td th:text="${stokMap[gudang.id]}"></td> <!-- Menampilkan stok -->
+                </tr>
+            </th:block>
+        </tbody>
+    </table>
+</th:block>
+
     </div>
 </body>
 </html>

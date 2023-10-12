@@ -8,6 +8,9 @@
     <!-- Atur atribut lainnya di sini -->
 </head>
 <body>
+    <form th:action="@{'/permintaan-pengiriman/' + ${detailPermintaanPengiriman.id} + '/cancel'}" method="get">
+        <button type="submit" class="btn btn-danger">Cancel Permintaan</button>
+    </form>
     <div class="container mt-5">
         <th:block th:if="${detailPermintaanPengiriman != null}">
             <h2>Detail Permintaan Pengiriman</h2>
@@ -15,7 +18,7 @@
                 <tbody>
                     <tr>
                         <th>Nomor Permintaan Pengiriman</th>
-                        <td th:text="${detailPermintaanPengiriman.nomorPermintaanPengiriman}"></td>
+                        <td th:text="${detailPermintaanPengiriman.nomorPengiriman}"></td>
                     </tr>
                     <tr>
                         <th>Waktu Permintaan</th>
