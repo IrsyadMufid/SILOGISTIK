@@ -3,36 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
-    <object th:include="~{fragments/common :: css}" th:remove="tag">
-    </object>
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
     <title>Hasil Filter Permintaan Pengiriman</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Hasil Filter Permintaan Pengiriman</h1>
+    <nav th:replace="~{fragments/navbar}"></nav>
+    <br>
+    <div class="container ">
+        <h1 class="text-center">Hasil Filter Permintaan Pengiriman</h1>
+        <br>
         <!-- Form untuk input tanggal awal, tanggal akhir, dan SKU -->
         <form method="get" th:action="@{'/permintaan-pengiriman/filter-permintaan-pengiriman'}">
-            <div class="form-group">
-                <label for="startDate">Tanggal Awal:</label>
-                <input type="datetime-local" id="startDate" name="startDate" class="form-control" required placeholder="2023-10-12T00:00:00">
-            </div>
-            <div class="form-group">
-                <label for="endDate">Tanggal Akhir:</label>
-                <input type="datetime-local" id="endDate" name="endDate" class="form-control" required placeholder="2023-10-11T00:00:00">
-            </div>
-            <div class="form-group">
-                <label for="barangSku">Barang:</label>
-                <select id="barangSku" name="sku" class="form-control">
-                    <option th:each="barangExisting : ${listBarangExisting}" th:value="${barangExisting.sku}" th:text="${barangExisting.merk}"></option>
-                </select>
-            </div>
-            </div>            
-            <button type="submit" class="btn btn-primary">Cari</button>
-        </form>
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label for="barangSku">Barang:</label>
+                    <select id="barangSku" name="sku" class="form-control">
+                        <option th:each="barangExisting : ${listBarangExisting}" th:value="${barangExisting.sku}" th:text="${barangExisting.merk}"></option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="startDate">Tanggal Awal:</label>
+                    <input type="datetime-local" id="startDate" name="startDate" class="form-control" required placeholder="2023-10-12">
+                </div>
+                <div class="col-md-4">
+                    <label for="endDate">Tanggal Akhir:</label>
+                    <input type="datetime-local" id="endDate" name="endDate" class="form-control" required placeholder="2023-10-11">
+                </div>
 
+            </div>
+            <div class="text-right mt-3">
+                <button type="submit" class="btn btn-primary">Cari</button>
+            </div>
+        </form>
+        <br>
         <!-- Tabel untuk menampilkan hasil filter -->
-        <table class="table">
-            <thead>
+        <table class="table text-center">
+            <thead class="bg-dark text-white">
                 <tr>
                     <th>Nomor Pengiriman</th>
                     <th>Nama Penerima</th>
@@ -46,7 +52,7 @@
                     <td th:text="${permintaan.nomorPengiriman}"></td>
                     <td th:text="${permintaan.namaPenerima}"></td>
                     <td th:text="${permintaan.alamatPenerima}"></td>
-                    <td th:text="${permintaan.tanggalPengiriman}"></td>
+                    <td th:text="${#dates.format(permintaan.tanggalPengiriman, 'dd-MM-yyyy')}"></td>
                 </tr>
             </tbody>
         </table>

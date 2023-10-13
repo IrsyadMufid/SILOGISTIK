@@ -1,15 +1,62 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
-    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
-    <meta charset="UTF-8" />
-    <title>Permintaan Pengiriman Dibatalkan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .success-icon {
+            color: #4CAF50;
+            font-size: 60px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-top: 10px;
+            color: #333;
+        }
+
+        p {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .back-button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Permintaan Pengiriman Dibatalkan</h1>
-    <p>Permintaan Pengiriman dengan Nomor Pengiriman <span th:text="${nomorPengiriman}"></span> berhasil dibatalkan.</p>
-    <!-- You can add more content or styling as needed -->
+    <div class="container">
+        <div class="success-icon">
+            &#10004; <!-- Unicode checkmark symbol -->
+        </div>
+        <h1>Permintaan Pengiriman Dibatalkan</h1>
+        <p>Permintaan Pengiriman dengan Nomor Pengiriman <span th:text="${nomorPengiriman}"></span> berhasil dibatalkan.</p>
+        <a href="/" class="back-button">Kembali ke Beranda</a>
+    </div>
 </body>
 </html>

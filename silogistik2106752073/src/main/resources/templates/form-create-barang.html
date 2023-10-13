@@ -9,16 +9,17 @@
 <body>
     <div class="container">
         <div class="card m-4 p-4">
+            <div class="card-header text-center">
+                <h2>Tambah Barang</h2>
+            </div>
             <div class="card-body">
                 <div class="justify-content-center">
-                    <h2>Tambah Barang</h2>
-                    <br>
                     <form th:action="@{/barang/tambah}" th:object="${barangDTO}" method="POST">
-                        Merek: <br>
-                        <input class="form-control" type="text" th:field="*{merk}" />
+                        Merek Barang: <br>
+                        <input class="form-control" type="text" th:field="*{merk}" required="required" />
                         <br><br>
                         Tipe Barang: <br>
-                        <select class="form-control" th:field="*{tipeBarang}">
+                        <select class="form-control" th:field="*{tipeBarang}" required="required">
                             <option value="1">Produk Elektronik</option>
                             <option value="2">Pakaian & Aksesoris</option>
                             <option value="3">Makanan & Minuman</option>
@@ -27,10 +28,11 @@
                         </select>
                         <br><br>
                         Harga: <br>
-                        <input class="form-control" type="number" th:field="*{hargaBarang}" />
+                        <input class="form-control" type="number" th:field="*{hargaBarang}" required="required" />
                         <br><br>
+                        <a class="btn btn-danger" href="/barang">Batal</a>
                         <button class="btn btn-primary" type="submit">Submit</button>
-                        <a class="btn btn-primary" href="/barang">Kembali ke Daftar Barang</a>
+                        
                     </form>
                 </div>
             </div>

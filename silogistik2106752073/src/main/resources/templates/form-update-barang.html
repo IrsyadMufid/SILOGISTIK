@@ -4,21 +4,23 @@
     <meta charset="UTF-8">
     <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
     <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
-    <title>Form Update Barang</title>
+    <title>Form Ubah Barang</title>
 </head>
 <body>
+    <nav th:replace="~{fragments/navbar}"></nav>
     <div class="container">
         <div class="card m-4 p-4">
+            <div class="card-header text-center">
+                <h2>Ubah Barang</h2>
+            </div>
             <div class="card-body">
                 <div class="justify-content-center">
-                    <h2>Update Barang</h2>
-                    <br>
                     <form th:action="@{'/barang/' + ${barangDTO.sku} + '/ubah'}" th:object="${barangDTO}" method="POST">
                         SKU: <br>
                         <input class="form-control" type="text" th:field="*{sku}" readonly="readonly" />
                         <br><br>
                         Merek: <br>
-                        <input class="form-control" type="text" th:field="*{merk}" />
+                        <input class="form-control" type="text" th:field="*{merk}"  required="required"/>
                         <br><br>
                         Tipe Barang: <br>
                         <select class="form-control" th:field="*{tipeBarang}" disabled>
@@ -30,10 +32,12 @@
                         </select>
                         <br><br>
                         Harga: <br>
-                        <input class="form-control" type="number" th:field="*{hargaBarang}" />
+                        <input class="form-control" type="number" th:field="*{hargaBarang}"  required="required" />
                         <br><br>
-                        <button class="btn btn-primary" type="submit">Update</button>
-                        <a class="btn btn-primary" href="/barang">Kembali ke Daftar Barang</a>
+                        <div class="text-center mt-4">
+                        <a class="btn btn-light" href="/barang">Kembali</a>
+                        <button class="btn btn-primary" type="submit">Ubah</button>
+                    </div>
                     </form>
                 </div>
             </div>

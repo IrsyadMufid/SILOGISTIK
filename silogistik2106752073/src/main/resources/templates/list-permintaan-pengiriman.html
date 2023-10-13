@@ -10,13 +10,19 @@
     <title>Daftar Permintaan Pengiriman</title>
 </head>
 <body>
+    <nav th:replace="~{fragments/navbar}"></nav>
     <div class="container">
-        <h1>Daftar Permintaan Pengiriman</h1>
+        <br><br><br>
+        <h1 class="text-center">Daftar Permintaan Pengiriman</h1>
+        <br>
+        <div class="text-center mb-4">
+            <a class="btn btn-primary" href="/permintaan-pengiriman/tambah">+Tambah Permintaan Pengiriman</a> <!-- Ganti href sesuai dengan URL yang sesuai -->
+        </div>
         <!-- Other content and buttons here -->
         <table id="permintaanPengirimanTable" class="display">
             <thead>
-                <tr>
-                    <th>Nomor</th>
+                <tr class="bg-dark text-white">
+                    <th>#</th>
                     <th>Waktu Permintaan</th>
                     <th>Nomor Pengiriman</th>
                     <th>Nama Penerima</th>
@@ -35,7 +41,7 @@
                     <td th:text="${permintaan.alamatPenerima}"></td>
                     <td th:text="${permintaan.tanggalPengiriman}"></td> <!-- Use the correct variable name -->
                     <td>
-                        <a type="button" class="btn btn-md btn-primary" th:href="@{'/permintaan-pengiriman/' + ${permintaan.id}}">Detail</a>
+                        <a type="button" class="btn btn-md btn-secondary" th:href="@{'/permintaan-pengiriman/' + ${permintaan.id}}">Detail</a>
                     </td>
                 </tr>
             </tbody>
@@ -54,5 +60,4 @@
         });
     </script>
 </body>
-
 </html>

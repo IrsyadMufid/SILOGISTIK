@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
     <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <title>SILOGISTIK Beranda</title>
 </head>
 <body>
     <nav th:replace="~{fragments/navbar}"></nav>
     <div class="container mt-5">
         <div class="text-center">
-            <h1>SILOGISTIK</h1>
+            <h1><i class="fas fa-warehouse"></i></h1>
+            <h1> SILOGISTIK</h1>
         </div>
         <div class="row mt-4">
             <div class="col-lg-3 col-md-6 mb-4">

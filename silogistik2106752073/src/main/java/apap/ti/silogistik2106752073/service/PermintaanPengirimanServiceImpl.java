@@ -107,7 +107,7 @@ public List<PermintaanPengiriman> getAllPermintaanPengiriman() {
 //     @Override
 // public void savePermintaanPengiriman(PermintaanPengiriman permintaanPengiriman) {
 //     // Simulate the creation time to be more than 24 hours ago (e.g., 2 days ago)
-//     LocalDateTime waktuPermintaan = LocalDateTime.now().minusDays(2);
+//     LocalDateTime waktuPermintaan = LocalDateTime.now().minusDays(4);
 //     permintaanPengiriman.setWaktuPermintaan(waktuPermintaan);
 
 //     for (PermintaanPengirimanBarang permintaanPengirimanBarang : permintaanPengiriman.getBarangList()) {
@@ -227,6 +227,7 @@ public List<PermintaanPengirimanDTO> getPermintaanPengirimanByDateRangeAndSKU(Lo
             if (ppb.getBarang().getSku().equals(sku)) {
                 PermintaanPengirimanDTO dto = new PermintaanPengirimanDTO();
                 dto.setId(permintaan.getId());
+                dto.setTanggalPengiriman(permintaan.getTanggalPengiriman());
                 dto.setNomorPengiriman(permintaan.getNomorPengiriman());
                 dto.setWaktuPermintaan(permintaan.getWaktuPermintaan());
                 dto.setNamaPenerima(permintaan.getNamaPenerima());

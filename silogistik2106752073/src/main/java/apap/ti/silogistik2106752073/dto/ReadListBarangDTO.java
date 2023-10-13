@@ -12,7 +12,7 @@ public class ReadListBarangDTO {
     private String sku;
     private String merk;
     private Integer stok;
-    private Long hargaBarang;
+    private Integer hargaBarang;
 
     // Getter and Setter
 }

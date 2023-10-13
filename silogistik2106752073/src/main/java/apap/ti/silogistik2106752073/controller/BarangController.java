@@ -70,40 +70,46 @@ public String listBarang(Model model) {
         barangService.saveBarang(barang);
     
         // Redirect ke halaman Daftar Barang atau halaman lain yang sesuai
-        return "redirect:/barang";
+        return "success-add-barang";
     }
 
     @GetMapping("/{sku}")
     public String detailBarang(@PathVariable("sku") String sku, Model model) {
         // Mengambil informasi barang berdasarkan sku
         Barang barang = barangService.getBarangBySku(sku);
-
+    
         if (barang != null) {
             // Mendapatkan daftar gudang yang memiliki barang tersebut
             List<Gudang> listGudang = gudangBarangService.findGudangByBarangSku(sku);
-
-            // Menyiapkan data untuk ditampilkan pada halaman detail barang
-            model.addAttribute("barang", barang);
-            model.addAttribute("listGudang", listGudang);
-
+    
             // Mengambil stok untuk setiap gudang dan menambahkannya ke model
             Map<Long, Integer> stokMap = new HashMap<>();
             for (Gudang gudang : listGudang) {
                 Integer stok = gudangBarangService.findStokByBarangAndGudang(barang, gudang);
                 stokMap.put(gudang.getId(), stok);
             }
+    
+            // Menghitung total stok dari semua gudang
+            int totalStok = stokMap.values().stream().mapToInt(Integer::intValue).sum();
+    
+            // Menyiapkan data untuk ditampilkan pada halaman detail barang
+            model.addAttribute("barang", barang);
+            model.addAttribute("listGudang", listGudang);
             model.addAttribute("stokMap", stokMap);
-
-            return "detail-barang"; // Sesuaikan dengan nama tampilan yang sesuai
+            model.addAttribute("totalStok", totalStok);
+    
+            return "detail-barang";
         } else {
             // Handle jika barang tidak ditemukan
             String errorMessage = "Barang tidak ditemukan dengan SKU: " + sku;
             model.addAttribute("errorMessage", errorMessage);
-
-            return "error-page"; // Sesuaikan dengan nama tampilan yang sesuai untuk halaman error
+    
+            return "error-page";
         }
     }
-@GetMapping("/{sku}/ubah")
+
+    
+    @GetMapping("/{sku}/ubah")
 public String formUpdateBarang(@PathVariable("sku") String sku, Model model) {
     // Mendapatkan barang berdasarkan SKU
     Barang barang = barangService.getBarangBySku(sku);

@@ -20,7 +20,7 @@ public class DetailPermintaanPengirimanDTO {
     private String namaPenerima;
     private String alamatPenerima;
     private String jenisLayanan;
-    private Double biayaPengiriman;
+    private Integer biayaPengiriman;
     private List<BarangDetailDTO> daftarBarang;
 
 }

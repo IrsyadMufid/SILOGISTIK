@@ -39,7 +39,7 @@ public class PermintaanPengiriman {
     private Date tanggalPengiriman;
 
     @Column(name = "biaya_pengiriman", nullable = false)
-    private Double biayaPengiriman;
+    private Integer biayaPengiriman;
 
     @Column(name = "jenis_layanan", nullable = false)
     private Integer jenisLayanan;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
@@ -10,13 +10,18 @@
     <title>Daftar Barang</title>
 </head>
 <body>
-    <div class="container">
+    <nav th:replace="~{fragments/navbar}"></nav>
+    <br>
+    <br>
+    <div class="container text-center">
         <h1>Daftar Barang</h1>
-        <a class="btn btn-primary" th:href="@{/barang/tambah}">Tambah Barang</a>
+        <a class="btn btn-primary" th:href="@{/barang/tambah}">+Tambah Barang</a>
+    </div>
+    <div class="container mt-3">
         <table id="barangTable" class="display">
             <thead>
-                <tr>
-                    <th>No</th>
+                <tr class="bg-dark text-white"> <!-- Baris pertama dengan warna hitam -->
+                    <th>#</th>
                     <th>SKU</th>
                     <th>Merk</th>
                     <th>Stok</th>
@@ -34,10 +39,9 @@
                     <td th:text="${barangDTO.stok}"></td>
                     <td th:text="${barangDTO.hargaBarang}"></td>
                     <td>
-                        <a type="button" class="btn btn-md btn-primary" th:href="@{/barang/{id}(id=${barangDTO.sku})}">Detail</a>
+                        <a type="button" class="btn btn-md btn-secondary" th:href="@{/barang/{id}(id=${barangDTO.sku})}">Detail</a>
                     </td>
                 </tr>
-                
             </tbody>
         </table>
     </div>

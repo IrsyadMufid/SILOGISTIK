@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import apap.ti.silogistik2106752073.dto.DetailPermintaanPengirimanDTO;
@@ -23,6 +24,7 @@ import apap.ti.silogistik2106752073.response.PermintaanPengirimanMapper;
 import apap.ti.silogistik2106752073.service.BarangService;
 import apap.ti.silogistik2106752073.service.KaryawanService;
 import apap.ti.silogistik2106752073.service.PermintaanPengirimanService;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/permintaan-pengiriman")
@@ -78,20 +80,38 @@ public String showFormTambahPermintaanPengiriman(Model model) {
 }
 
 @PostMapping("/tambah")
-public String submitFormTambahPermintaanPengiriman(@ModelAttribute PermintaanPengirimanRequestDTO permintaanPengirimanRequestDTO, Model model) {
+public String submitFormTambahPermintaanPengiriman(@Valid @ModelAttribute PermintaanPengirimanRequestDTO permintaanPengirimanRequestDTO, Model model, BindingResult bindingResult) {
     // Generate nomor pengiriman
     
     
     String nomorPengiriman = permintaanPengirimanService.generateUniqueNomorPengiriman(permintaanPengirimanRequestDTO);
     permintaanPengirimanRequestDTO.setNomorPengiriman(nomorPengiriman);
+    if (bindingResult.hasErrors()) {
+        var errorMessage = "Data tidak Valid";
+        model.addAttribute("errorMessage", errorMessage);
+        return "error-page-permintaan-pengiriman";
+    }
+
+    if (permintaanPengirimanRequestDTO.getBarangList() == null || permintaanPengirimanRequestDTO.getBarangList().isEmpty() || permintaanPengirimanRequestDTO.getBarangList().size() == 0 || nomorPengiriman == null) {
+        var errorMessage = "Anda harus menambahkan setidaknya satu barang";
+        model.addAttribute("errorMessage", errorMessage);
+        return "error-page-permintaan-pengiriman";
+    }
+
+    if (nomorPengiriman == null || permintaanPengirimanRequestDTO.getBarangList() == null || permintaanPengirimanRequestDTO.getBarangList().isEmpty()) {
+        var errorMessage = "Anda harus menambahkan setidaknya satu barang";
+        model.addAttribute("errorMessage", errorMessage);
+        return "error-page-permintaan-pengiriman";
+    }
     
     // Simpan permintaan pengiriman
     PermintaanPengiriman permintaanPengiriman = permintaanPengirimanMapper.requestDtoToEntity(permintaanPengirimanRequestDTO);
     permintaanPengirimanService.savePermintaanPengiriman(permintaanPengiriman);
 
     // Redirect ke halaman daftar permintaan pengiriman
-    return "redirect:/permintaan-pengiriman/tambah";
+    return "success-add-permintaan-pengiriman";
 }
+
 @GetMapping("/{idPermintaanPengiriman}/cancel")
 public String cancelPermintaanPengiriman(@PathVariable Long idPermintaanPengiriman, Model model) {
     String nomorPengiriman = permintaanPengirimanService.cancelPermintaanPengiriman(idPermintaanPengiriman);

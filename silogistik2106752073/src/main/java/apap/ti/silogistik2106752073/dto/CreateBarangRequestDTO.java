@@ -11,5 +11,5 @@ public class CreateBarangRequestDTO {
     private String sku;
     private Integer tipeBarang; // Gunakan Integer untuk tipe barang
     private String merk;
-    private Long hargaBarang;
+    private Integer hargaBarang;
 }

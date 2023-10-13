@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class BarangDetailDTO {
     private Barang barang;
     private int kuantitasPesanan;
-    private double totalHarga;
+    private int totalHarga;
     private String namaBarang; // Informasi yang diambil dari entitas Barang
-    private double hargaBarang; // Informasi yang diambil dari entitas Barang
+    private int hargaBarang; // Informasi yang diambil dari entitas Barang
 }

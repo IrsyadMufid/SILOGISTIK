@@ -7,66 +7,93 @@
     <title>Tambah Permintaan Pengiriman</title>
 </head>
 <body>
-    <h2>Tambah Permintaan Pengiriman</h2>
-    <form th:action="@{'/permintaan-pengiriman/tambah'}" th:object="${permintaanPengirimanRequestDTO}" method="post">
-        <div>
-            <label for="idKaryawan">Karyawan:</label>
-            <select class="form-control" th:field="*{karyawan}">
-                <option th:each="karyawan, karyawanItr: ${listKaryawan}" th:value="${karyawan.id}" th:text="${karyawan.nama}"></option>
-              </select>
+    <nav th:replace="~{fragments/navbar}"></nav>
+    <div class="container">
+        <div class="card mt-4">
+            <div class="card-header text-center">
+                <h2>Buat Permintaan Pengiriman</h2>
+            </div>
+            <div class="card-body">
+                <form th:action="@{'/permintaan-pengiriman/tambah'}" th:object="${permintaanPengirimanRequestDTO}" method="post">
+                    <div class="row">
+                        <!-- Kolom 1 -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="idKaryawan">Karyawan Bertugas:</label>
+                                <select class="form-control" th:field="*{karyawan}"  required="required">
+                                    <option th:each="karyawan : ${listKaryawan}" th:value="${karyawan.id}" th:text="${karyawan.nama}"></option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="namaPenerima">Nama Penerima:</label>
+                                <input id="namaPenerima" type="text" class="form-control" th:field="*{namaPenerima}"  required="required" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="alamatPenerima">Alamat Penerima:</label>
+                                <input id="alamatPenerima" type="text" class="form-control" th:field="*{alamatPenerima}"  required="required"/>
+                            </div>
+                        </div>
+                        <!-- Kolom 2 -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="tanggalPengiriman">Tanggal Pengiriman:</label>
+                                <input id="tanggalPengiriman" type="date" class="form-control" th:field="*{tanggalPengiriman}"  required="required"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="jenisLayanan">Pilih Jenis Layanan:</label>
+                                <select id="jenisLayanan" class="form-control" th:field="*{jenisLayanan}"  required="required">
+                                    <option value="1">Same Day</option>
+                                    <option value="2">Kilat</option>
+                                    <option value="3">Reguler</option>
+                                    <option value="4">Hemat</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="biayaPengiriman">Biaya Pengiriman:</label>
+                                <input id="biayaPengiriman" type="number" class="form-control" th:field="*{biayaPengiriman}"  required="required"/>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="text-end">
+                    <button type="submit" name="addRow" class="btn btn-primary float-right">Tambah Barang</button>
+                    </div>
+                    <br>
+                    <!-- Tabel Barang -->
+                    <table class="table table-bordered mt-4">
+                        <thead class="bg-dark text-white">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Barang</th>
+                                <th scope="col">Kuantitas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="barang, barangItr: ${permintaanPengirimanRequestDTO.barangList}">
+                                <td th:text="${barangItr.count}">1</td>
+                                <td>
+                                    <select th:field="*{barangList[__${barangItr.index}__].barang.sku}" class="form-control">
+                                        <option th:each="barangExisting : ${listBarangExisting}" th:value="${barangExisting.sku}" th:text="${barangExisting.merk}"></option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input th:field="*{barangList[__${barangItr.index}__].kuantitasPesanan}" class="form-control" type="number">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center mt-4">
+                    <!-- Tombol Buat Permintaan Pengiriman -->
+                    <a class="btn btn-danger" href="/permintaan-pengiriman">Batal</a>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+                </form>
+            </div>
         </div>
-        <div>
-            <label for="tanggalPengiriman">Tanggal Pengiriman:</label>
-            <input id="tanggalPengiriman" type="date" th:field="*{tanggalPengiriman}" />
-        </div>
-        <div>
-            <label for="namaPenerima">Nama Penerima:</label>
-            <input id="namaPenerima" type="text" th:field="*{namaPenerima}" />
-        </div>
-        <div>
-            <label for="jenisLayanan">Jenis Layanan:</label>
-            <select id="jenisLayanan" th:field="*{jenisLayanan}">
-                <option value="1">Same Day</option>
-                <option value="2">Kilat</option>
-                <option value="3">Reguler</option>
-                <option value="4">Hemat</option>
-            </select>
-        </div>
-        <div>
-            <label for="alamatPenerima">Alamat Penerima:</label>
-            <input id="alamatPenerima" type="text" th:field="*{alamatPenerima}" />
-        </div>
-        <div>
-            <label for="biayaPengiriman">Biaya Pengiriman:</label>
-            <input id="biayaPengiriman" type="number" th:field="*{biayaPengiriman}" />
-        </div>
-        <!-- Table for adding items (Barang) -->
-        <table class="table table-bordered">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Barang</th>
-                    <th scope="col">Kuantitas</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="barang, barangItr: ${permintaanPengirimanRequestDTO.barangList}">
-                    <th scope="row" th:text="${barangItr.count}">1</th>
-                    <td>
-                        <select th:field="*{barangList[__${barangItr.index}__].barang.sku}" class="form-control">
-                            <option th:each="barangExisting : ${listBarangExisting}" th:value="${barangExisting.sku}" th:text="${barangExisting.merk}"></option>
-                        </select>
-                    </td>
-                    <td>
-                        <input th:field="*{barangList[__${barangItr.index}__].kuantitasPesanan}" class="form-control" type="number">
-                    </input>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    
-        <button type="submit" name="addRow" class="btn btn-success">Tambah Barang</button>
-        <button type="submit" class="btn btn-primary">Buat Permintaan Pengiriman</button>
-    </form>
+    </div>
 </body>
 </html>

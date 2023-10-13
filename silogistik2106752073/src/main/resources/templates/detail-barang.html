@@ -8,58 +8,69 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+    <nav th:replace="~{fragments/navbar}"></nav>
     <div class="container mt-5">
         <!-- Check if barang is not null -->
         <th:block th:if="${barang != null}">
-            <h2>Detail Barang</h2>
-            <table class="table">
-                <tbody>
-                    <tr>
-                        <th>SKU</th>
-                        <td th:text="${barang.sku}"></td>
-                    </tr>
-                    <tr>
-                        <th>Merek</th>
-                        <td th:text="${barang.merk}"></td>
-                    </tr>
-                    <tr>
-                        <th>Tipe Barang</th>
-                        <td>
-                            <span th:switch="${barang.tipeBarang}">
-                                <span th:case="1">Produk Elektronik</span>
-                                <span th:case="2">Pakaian & Aksesoris</span>
-                                <span th:case="3">Makanan & Minuman</span>
-                                <span th:case="4">Kosmetik</span>
-                                <span th:case="5">Perlengkapan Rumah</span>
-                                <span th:case="*">Tipe Barang Tidak Diketahui</span>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Harga Barang</th>
-                        <td th:text="${barang.hargaBarang}"></td>
-                    </tr>
-                    <!-- You can add more fields as needed -->
-                </tbody>
-            </table>
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2 class="card-title">Detail Barang</h2>
+                    <a class="btn btn-primary" th:href="@{'/barang/' + ${barang.sku} + '/ubah'}">+Ubah Baranag</a>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>Merek</th>
+                                <td class="pl-5" th:text="${barang.merk}"></td>
+                            </tr>
+                            <tr>
+                                <th>SKU</th>
+                                <td class="pl-5" th:text="${barang.sku}"></td>
+                            </tr>
+                            <tr>
+                                <th>Tipe Barang</th>
+                                <td class="pl-5">
+                                    <span th:switch="${barang.tipeBarang}">
+                                        <span th:case="1">Produk Elektronik</span>
+                                        <span th:case="2">Pakaian & Aksesoris</span>
+                                        <span th:case="3">Makanan & Minuman</span>
+                                        <span th:case="4">Kosmetik</span>
+                                        <span th:case="5">Perlengkapan Rumah</span>
+                                        <span th:case="*">Tipe Barang Tidak Diketahui</span>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Total Stok</th>
+                                <td class="pl-5" th:text="${totalStok}"></td>
+                            </tr>
+                            <tr>
+                                <th>Harga Barang</th>
+                                <td class="pl-5" th:text="${barang.hargaBarang}"></td>
+                            </tr>
+                            <!-- You can add more fields as needed -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-            <h3>Daftar Gudang yang Memiliki Barang</h3>
+            <h6 class="mt-4">Daftar Gudang yang Memiliki Barang</h6>
             <table class="table">
-                <thead>
+                <thead class="bg-dark text-white">
                     <tr>
-                        <th>No.</th> <!-- Tambah kolom nomor row -->
+                        <th>No.</th>
                         <th>Nama Gudang</th>
                         <th>Alamat Gudang</th>
-                        <th>Stok</th> <!-- Tambah kolom stok -->
+                        <th>Stok</th>
                     </tr>
                 </thead>
                 <tbody>
                     <!-- Loop through the list of gudang and display their information -->
                     <th:block th:each="gudang, iterStat : ${listGudang}">
                         <tr>
-                            <td th:text="${iterStat.count}"></td> <!-- Menampilkan nomor row -->
+                            <td th:text="${iterStat.count}"></td>
                             <td>
-                                <!-- Hyperlink to detail gudang page -->
                                 <a th:href="@{'/gudang/' + ${gudang.id}}" th:text="${gudang.nama}"></a>
                             </td>
                             <td th:text="${gudang.alamatGudang}"></td>
@@ -67,9 +78,10 @@
                         </tr>
                     </th:block>
                 </tbody>
-            </table>  
-            <a class="btn btn-primary" th:href="@{'/barang/' + ${barang.sku} + '/ubah'}">
-                Edit</a>          
+            </table>   
+            <div class="text-center mt-4">
+                <a class="btn btn-secondary" th:href="@{/barang}">Kembali</a>
+            </div>   
         </th:block>
 
         <!-- Display error message if barang is null -->

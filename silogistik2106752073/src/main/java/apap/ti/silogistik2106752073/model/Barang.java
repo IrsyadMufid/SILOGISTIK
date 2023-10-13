@@ -19,6 +19,7 @@ import jakarta.persistence.*;
 @Table(name = "BARANG")
 public class Barang {
 
+    
     @Id
     @Column(name = "sku", nullable = false, unique = true, length = 7)
     private String sku;
@@ -30,7 +31,7 @@ public class Barang {
     private String merk;
 
     @Column(name = "harga_barang", nullable = false)
-    private Long hargaBarang;
+    private Integer hargaBarang;
 
     @OneToMany(mappedBy = "barang", cascade = CascadeType.ALL)
     private List<GudangBarang> gudangBarangList;

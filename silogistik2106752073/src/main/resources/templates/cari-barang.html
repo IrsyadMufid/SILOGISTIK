@@ -13,7 +13,7 @@
         <form th:action="@{/gudang/cari-barang}" method="get" class="zjustify-content-center">
             <div class="form-group">
                 <label for="sku">Pilih Barang</label>
-                <select class="form-control" id="sku" name="sku">
+                <select class="form-control" id="sku" name="sku"  required="required">
                     <option value="">Pilih Barang</option>
                     <option th:each="barang : ${daftarBarang}" th:value="${barang.sku}" th:text="${barang.merk + ' - ' + barang.sku}"></option>
                 </select>
